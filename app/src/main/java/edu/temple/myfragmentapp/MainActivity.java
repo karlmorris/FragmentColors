@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -18,10 +19,17 @@ public class MainActivity extends AppCompatActivity implements ColorFragment.But
 
         fragments = new ColorFragment[4];
 
-        fragments[0] = new ColorFragment();
-        fragments[1] = new ColorFragment();
-        fragments[2] = new ColorFragment();
-        fragments[3] = new ColorFragment();
+        ColorFragment fragment = new ColorFragment();
+
+        Bundle bundle = new Bundle();
+        //bundle.putInt(KEY_ID, fragmentId);
+        //bundle.putString(KEY_COLOR, defaultColor);
+        fragment.setArguments(bundle);
+
+        fragments[0] = ColorFragment.newInstance(0, "Red");
+        fragments[1] = ColorFragment.newInstance(1, "Blue");
+        fragments[2] = ColorFragment.newInstance(2, "Magenta");
+        fragments[3] = ColorFragment.newInstance(3, "Green");
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -30,11 +38,14 @@ public class MainActivity extends AppCompatActivity implements ColorFragment.But
                 .add(R.id.container_3, fragments[2])
                 .add(R.id.container_4, fragments[3])
                 .commit();
+
+
+        //startActivity(new Intent(MainActivity.this, SecondActivity.class));
     }
 
-    public void buttonClick(ColorFragment clickedFragment) {
+    public void buttonClick(int fragmentId) {
         for (ColorFragment fragment : fragments) {
-            if (clickedFragment != fragment)
+            if (fragmentId != fragment.getFragmentId())
                 fragment.changeColor();
         }
     }
